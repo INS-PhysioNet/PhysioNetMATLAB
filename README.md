@@ -1,6 +1,6 @@
 # PhysioNet MATLAB Code
 
-Code shared between members of the PhysioNet team at the [Institut de Neurosciences des Systèmes](https://ins-amu.fr/).
+Code shared between members of the PhysioNet team at the [Institut de Neurosciences des Systèmes](https://ins-amu.fr/) (Aix-Marseille université, Marseille, France).
 
 ## Contents
 
@@ -11,4 +11,4 @@ Code shared between members of the PhysioNet team at the [Institut de Neuroscien
 
 ## License
 
-This code was developed by [members of the PhysioNet team](https://github.com/INS-PhysioNet) (Aix-Marseille université, Marseille, France). It is free software distributed under the [General Public License (GPL)](http://www.gnu.org/licenses/gpl.html).
+This code was developed by [members of the PhysioNet team](https://github.com/INS-PhysioNet). It is free software distributed under the [General Public License (GPL)](http://www.gnu.org/licenses/gpl.html).
