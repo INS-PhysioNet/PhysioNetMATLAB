@@ -1,10 +1,13 @@
-function status = saveMatrix(A,file,labels)
+function status = saveMatrix(A,file,labels,opt)
 % saveMatrix Save content of matrix A in a text file, prepending a metadata header
 %
 % arguments:
 %     A         matrix to save
 %     file      string, file name to save matrix to
 %     labels    string, repeating, names of columns
+%
+% name-value arguments:
+%     extra     cell, extra arguments to pass to writematrix
 %
 % output:
 %     status    logical, always true; necessary to allow the syntax:
@@ -27,11 +30,14 @@ end
 arguments (Repeating)
   labels (1,1) string
 end
+arguments
+    opt.extra cell = {}
+end
 
 % save result, adding a header to describe file content
 header = ["% columns : " + strjoin(cellstr(labels),', '), ...
           "% to read this file on MATLAB:    >> readmatrix(file_path,FileType='text',CommentStyle='%');"];
 writelines(header,file);
-writematrix(A,file,FileType='text',WriteMode='append')
+writematrix(A,file,'FileType','text','WriteMode','append',opt.extra{:})
 
 status = true;
