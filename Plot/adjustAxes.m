@@ -21,14 +21,14 @@ end
 
 % set default values
 args = {'FontSize', 'TitleFontSizeMultiplier', 'TitleFontWeight', 'TickDir', 'Color', 'Box';
-        12,         1.3,                       'normal',          'out',     [1,1,1], 'off'};
+        8,          1.25,                      'normal',          'out',     [1,1,1], 'off'};
 if isa(axes,'matlab.graphics.axis.PolarAxes')
   args1 = {'LineWidth';
-           1.3};
+           1};
   args = [args,args1];
 else
   args1 = {'LineWidth', 'LabelFontSizeMultiplier', 'XColor', 'YColor', 'ZColor';
-           1.7,         1.2,                       [0,0,0],  [0,0,0],  [0,0,0]};
+           1,           1.125,                     [0,0,0],  [0,0,0],  [0,0,0]};
   args = [args,args1];
 end
 

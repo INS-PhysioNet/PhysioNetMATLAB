@@ -8,7 +8,7 @@ function [fig,axs] = makeFigure(name,fig_title,subplots,opt)
 %
 % name-value arguments:
 %     show          logical = true, whether to show the figure
-%     size          (2,1) double = [NaN,NaN], figure size, default is screen size
+%     size          (2,1) double = [NaN,NaN], figure size in cm, default is screen size
 %     polar         (:,:) logical = false, specify whether each axis should be polar
 %     TileSpacig    string = 'compact', controls subplots spacing (see MATLAB tiledlayout)
 %     axProp        cell = {}, additional properties passed to call of axes
@@ -42,7 +42,10 @@ else
 end
 
 % make figure of correct size
+orig_units = get(0,'Units');
+set(0,'Units','centimeters')
 screen_size = get(0,'Screensize');
+set(0,'Units',orig_units)
 pos = screen_size;
 pos([false,false,~isnan(opt.size)]) = opt.size(~isnan(opt.size));
 % center figure
@@ -51,9 +54,9 @@ for i = 1 : 2
 end
 
 if opt.show
-  fig = figure('Name',name,'NumberTitle','off','Position',pos,'DefaultLineLinewidth',1.3);
+  fig = figure('Name',name,'NumberTitle','off','Units','centimeters','Position',pos,'DefaultLineLinewidth',1.3);
 else
-  fig = figure('Name',name,'NumberTitle','off','Position',pos,'DefaultLineLinewidth',1.3,'Visible','off');
+  fig = figure('Name',name,'NumberTitle','off','Units','centimeters','Position',pos,'DefaultLineLinewidth',1.3,'Visible','off');
 end
 
 t = []; % empty tiledlayout handle, to keep track of whether a suptitle is needed

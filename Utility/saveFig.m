@@ -7,7 +7,7 @@ function status = saveFig(fig,file_name,format,opt)
 %     format       (n_formats,1) string, file types
 %
 % name-value arguments:
-%     res          double = 0, image resolution, default is auto, should not be used for vector graphics
+%     res          double = 300, image resolution
 %     pause        double = 0, pause time before saving, useful to allow MATLAB to render figures before saving
 %
 % output:
@@ -16,8 +16,6 @@ function status = saveFig(fig,file_name,format,opt)
 %                  >> logical_flag && saveFig(fig,file_name,format);
 %
 %                  which will save the figure only if logical_flag is true
-
-% NOTE: since R2025a, exportgraphics allows svg format, try implementing in the future
 
 % Copyright (C) 2025 by Pietro Bozzo
 %
@@ -28,7 +26,7 @@ arguments
   fig (1,1) matlab.ui.Figure
   file_name (1,1) string
   format (:,1) string
-  opt.res (1,1) {mustBeNumeric,mustBeNonnegative} = 0
+  opt.res (1,1) {mustBeNumeric,mustBeNonnegative} = 300
   opt.pause (1,1) {mustBeNumeric,mustBeNonnegative} = 0
 end
 
@@ -39,24 +37,24 @@ if opt.pause ~= 0
   pause(opt.pause)
 end
 
-% forces vector output:
-%print(fig,'-vector','-d'+format,file_name+"."+format)
-% to try with R2025a:
-%exportgraphics(fig,file_name+"."+format,ContentType='vector')
-
 % save in all formats
 for fmat = format'
+
   if fmat == "svg"
-    % remove white background from axes
+    % remove white background from figure and axes
     set(findall(fig,'type','axes'),'Color','none')
+    fig.Color = 'none';
   end
 
-  if opt.res == 0
-    saveas(fig,file_name+"."+fmat,fmat)
-  else
-    % specify resolution
-    exportgraphics(fig,file_name+"."+fmat,Resolution=opt.res);
+  exportgraphics(fig,file_name+"."+fmat,'Resolution',opt.res,'BackgroundColor','none');
+
+  if fmat == "svg"
+    % restore white backgrounds
+    set(findall(fig,'type','axes'),'Color','white')
+    fig.Color = 'white';
+    disp('This warning can be safely ignored, exported image has no background :)')
   end
+
 end
 
 status = true;
