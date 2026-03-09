@@ -1,4 +1,4 @@
-function [fig,axs] = makeFigure(name,fig_title,subplots,opt)
+function [fig,axs,t] = makeFigure(name,fig_title,subplots,opt)
 % makeFigure Make a figure and return handles
 %
 % arguments:
@@ -12,6 +12,12 @@ function [fig,axs] = makeFigure(name,fig_title,subplots,opt)
 %     polar         (:,:) logical = false, specify whether each axis should be polar
 %     TileSpacig    string = 'compact', controls subplots spacing (see MATLAB tiledlayout)
 %     axProp        cell = {}, additional properties passed to call of axes
+%     format        string, either 'paper' (default) or 'poster', increases figure size, font sizes, and axes lines' width
+%
+% output:
+%     fig           figure handle
+%     axs           array of axes handles
+%     t             TiledChartLayout handle, empty if 'subplots' = [1,1]
 
 % Copyright (C) 2025 by Pietro Bozzo
 %
@@ -27,6 +33,7 @@ arguments
   opt.polar {mustBeLogical} = false
   opt.TileSpacig (1,1) string = 'compact'
   opt.axProp (:,1) cell = {}
+  opt.format (1,1) string {mustBeMember(opt.format,["paper","poster"])} = "paper"
 end
 
 if any(opt.size<=0)
@@ -47,7 +54,7 @@ set(0,'Units','centimeters')
 screen_size = get(0,'Screensize');
 set(0,'Units',orig_units)
 pos = screen_size;
-pos([false,false,~isnan(opt.size)]) = opt.size(~isnan(opt.size));
+pos([false,false,~isnan(opt.size)]) = opt.size(~isnan(opt.size)) * (1 + 1.5 * (opt.format=="poster")); % increase size of 2.5x in 'poster' mode
 % center figure
 for i = 1 : 2
   pos(i) = max(pos(i), pos(i)+(screen_size(i+2)-pos(i+2))/2);
@@ -73,7 +80,7 @@ if any(subplots ~= [1,1])
       axs(i) = nexttile(i);
     end
     hold on
-    adjustAxes(axs(i),opt.axProp{:})
+    adjustAxes(axs(i),opt.axProp{:},'format',opt.format)
   end
 else
   if opt.polar
@@ -83,7 +90,7 @@ else
     axs = gca;
   end
   hold on
-  adjustAxes(axs,opt.axProp{:})
+  adjustAxes(axs,opt.axProp{:},'format',opt.format)
 end
 
 if fig_title ~= ""

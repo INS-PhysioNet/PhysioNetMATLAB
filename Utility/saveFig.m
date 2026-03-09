@@ -52,7 +52,6 @@ for fmat = format'
     % restore white backgrounds
     set(findall(fig,'type','axes'),'Color','white')
     fig.Color = 'white';
-    disp('This warning can be safely ignored, exported image has no background :)')
   end
 
 end

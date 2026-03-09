@@ -1,11 +1,16 @@
-function adjustAxes(axes,varargin)
+function adjustAxes(axes,varargin,opt)
 % adjustAxes Adjust axes properties using default values
 %
 % arguments:
-%     varargin    list of 'property', 'value' pairs, used as name-value arguments
-%                 to set axis properties (NOTE: property='value' syntax is not
-%                 supported)
-%                 to leave a property unchanged, specify 'property',missing
+%     axes        axes to modify
+%
+% repeating arguments:
+%     varargin    list of 'Name', 'Value' pairs, used as name-value arguments to set axis properties
+%                 (NOTE: name='value' syntax is not supported)
+%                 to leave a property unchanged, specify 'Name',missing
+%
+% name-value arguments:
+%     format      string, either 'paper' (default) or 'poster', controls font sizes and lines' width
 
 % Copyright (C) 2025 by Pietro Bozzo
 %
@@ -14,21 +19,53 @@ function adjustAxes(axes,varargin)
 
 % NOTE see AdjustAxes for interesting feature on passing fig AS ARG AND SETTING XLim
 
+arguments
+  axes
+end
+arguments (Repeating)
+  varargin
+end
+arguments
+  opt.format (1,1) string {mustBeMember(opt.format,["paper","poster"])} = "paper"
+end
+
 % validate input
 if mod(numel(varargin),2) ~= 0
-  error('adjustAxes:ArgNumber','Number of arguments must be even')
+  error('adjustAxes:ArgNumber','Number of name-value arguments must be even')
 end
 
 % set default values
-args = {'FontSize', 'TitleFontSizeMultiplier', 'TitleFontWeight', 'TickDir', 'Color', 'Box';
-        8,          1.25,                      'normal',          'out',     [1,1,1], 'off'};
+if opt.format == "paper"
+  fs = 8;
+  lw = 1;
+  mksz = 20;
+  axlw = 1;
+  labelfs = 1.125;
+else
+  fs = 14;
+  lw = 1.5;
+  mksz = 60;
+  axlw = 2;
+  labelfs = 1.286;
+end
+args = {'FontSize',                      fs;
+        'TitleFontSizeMultiplier',       1.25;
+        'DefaultLineLineWidth',          lw;
+        %'DefaultBoxChartLineWidth',      lw; % not yet available in R2025a
+        %'DefaultBoxChartMarkerSize',     mksz;
+        %'DefaultViolinPlotLineWidth',    lw;
+        'TitleFontWeight',               'normal';
+        'TickDir',                       'out';
+        'TickLength',                    [0.02,0.01];
+        'Color',                         [1,1,1];
+        'Box'                            'off' }';
 if isa(axes,'matlab.graphics.axis.PolarAxes')
   args1 = {'LineWidth';
-           1};
+           axlw};
   args = [args,args1];
 else
   args1 = {'LineWidth', 'LabelFontSizeMultiplier', 'XColor', 'YColor', 'ZColor';
-           1,           1.125,                     [0,0,0],  [0,0,0],  [0,0,0]};
+           axlw,        labelfs,                   [0,0,0],  [0,0,0],  [0,0,0]};
   args = [args,args1];
 end
 
