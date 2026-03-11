@@ -9,6 +9,8 @@ function [fig,axs,t] = makeFigure(name,fig_title,subplots,opt)
 % name-value arguments:
 %     show          logical = true, whether to show the figure
 %     size          (2,1) double = [NaN,NaN], figure size in cm, default is screen size
+%     span          (:,3) integer, i-th row specifies location, number of rows, and number of columns spanned by i-th axis (see MATLAB tiledlayout),
+%                   default is a grid of 1x1 axes
 %     polar         (:,:) logical = false, specify whether each axis should be polar
 %     TileSpacig    string = 'compact', controls subplots spacing (see MATLAB tiledlayout)
 %     axProp        cell = {}, additional properties passed to call of axes
@@ -30,6 +32,7 @@ arguments
   subplots (2,1) {mustBeNumeric,mustBeInteger,mustBePositive} = [1,1]
   opt.show (1,1) {mustBeLogical} = true
   opt.size (1,2) {mustBeNumeric} = [NaN,NaN]
+  opt.span (:,3) {mustBeInteger,mustBePositive} = [(1:subplots(1)*subplots(2)).',ones(subplots(1)*subplots(2),2)]
   opt.polar {mustBeLogical} = false
   opt.TileSpacig (1,1) string = 'compact'
   opt.axProp (:,1) cell = {}
@@ -42,10 +45,9 @@ end
 if isscalar(opt.polar)
   opt.polar = repelem(opt.polar,subplots(1)*subplots(2),1);
 else
-  if numel(opt.polar) ~= subplots(1) * subplots(2)
-    error('makeFigure:polar','Argument ''polar'' must have one value per subplot')
+  if numel(opt.polar) ~= size(opt.span,1)
+    error('makeFigure:polarSize','Argument ''polar'' must have one value per subplot')
   end
-  opt.polar = opt.polar.';
 end
 
 % make figure of correct size
@@ -71,13 +73,14 @@ t = []; % empty tiledlayout handle, to keep track of whether a suptitle is neede
 if any(subplots ~= [1,1])
   t = tiledlayout(subplots(1),subplots(2),TileSpacing=opt.TileSpacig,Padding='compact');
   axs = matlab.graphics.axis.Axes.empty;
-  for i = 1 : subplots(1) * subplots(2)
+  for i = 1 : size(opt.span,1)
     if opt.polar(i)
       axs(i) = polaraxes(t);
-      axs(i).Layout.Tile = i;
+      axs(i).Layout.Tile = opt.span(i,1);
+      axs(i).Layout.TileSpan = opt.span(i,2:3);
       thetaticks([0,90,180,270]), thetaticklabels(["0",'π/2','π','3π/2']), rticks([0.4,0.8])
     else
-      axs(i) = nexttile(i);
+      axs(i) = nexttile(opt.span(i,1),opt.span(i,2:3));
     end
     hold on
     adjustAxes(axs(i),opt.axProp{:},'format',opt.format)

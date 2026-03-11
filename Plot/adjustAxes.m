@@ -56,7 +56,6 @@ args = {'FontSize',                      fs;
         %'DefaultViolinPlotLineWidth',    lw;
         'TitleFontWeight',               'normal';
         'TickDir',                       'out';
-        'TickLength',                    [0.02,0.01];
         'Color',                         [1,1,1];
         'Box'                            'off' }';
 if isa(axes,'matlab.graphics.axis.PolarAxes')
@@ -97,6 +96,20 @@ end
 varargin = varargin(varg_to_keep);
 
 for i = 1 : numel(axes)
+
+  % set tick marks length based on axes size
+  old_units = axes(i).Units;
+  axes(i).Units = 'pixels';
+  position = axes(i).Position;
+  axes(i).Units = old_units;
+  position = max(position(3),position(4));
+  if position > 100
+    args = [args,{"TickLength";[0.01,0.01]}];
+  else
+    args = [args,{"TickLength";[0.02,0.01]}];
+  end
+
   set(axes(i),args{:},varargin{:})
   hold(axes(i),'on')
+
 end
