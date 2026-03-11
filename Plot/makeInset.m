@@ -1,16 +1,28 @@
-function ax = makeInset(a,b,c,d,varargin,opt)
-% makeInset Add inset to axes
+function inset_ax = makeInset(a,b,c,d,varargin,opt)
+% makeInset Add inset to axis
 %
 % arguments:
-%     a           double, factor for original x position
-%     b           double, factor for original y position
-%     c           double, factor for original width, if NaN, inset will be squared
-%     d           double, factor for original heigth, if NaN, inset will be squared
+%     a, b, c, d    double, multiplicative factors for original axis Position, i.e., [a0, b0, c0, d0]: inset will have Position:
+%                     [a0+a*c0, b0+b*d0, c*c0, d*d0]
+%                   thus, a and b control the position of the origin of the inset, while c and d control its heigth and width
+%                   if either c or d is NaN, the inset will be square
+%
+% repeating arguments:
+%     varargin      all extra arguments are passed to adjustAxes() (NOTE: name='value' syntax is not supported for varargin)
 %
 % name-value arguments:
-%     ax
+%     ax            axis to add inset to, default is gca()
 %
-%     varargin    all extra arguments are passed to adjustAxes
+% examples:
+%
+%     % make an inset spanning the top-right quadrant of current axis
+%     >> makeInset(0.5,0.5,0.5,0.5);
+%
+%     % make an inset spanning the top half of current axis
+%     >> makeInset(0,0.5,1,0.5);
+%
+%     % make an inset located east of current axis, slightly suprassing its right border
+%     >> makeInset(0.7,0.3,0.4,0.4);
 
 arguments
   a (1,1)
@@ -41,13 +53,14 @@ if isnan(pos(4))
   nan_ind = 4;
 end
 
-ax = axes('Position',pos);
+inset_ax = axes('Position',pos);
 if nan_ind ~= 0
-  set(ax,'Units','centimeters')
-  pos = get(ax,'Position');
+  orig_units = inset_ax.Units;
+  set(inset_ax,'Units','centimeters')
+  pos = get(inset_ax,'Position');
   pos(nan_ind) = pos(7-nan_ind);
-  set(ax,'Position',pos);
-  set(ax,'Units','normalized')
+  set(inset_ax,'Position',pos);
+  set(inset_ax,'Units',orig_units)
 end
 
-adjustAxes(ax,varargin{:})
+adjustAxes(inset_ax,varargin{:})

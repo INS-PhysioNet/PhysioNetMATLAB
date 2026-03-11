@@ -5,8 +5,7 @@ function adjustAxes(axes,varargin,opt)
 %     axes        axes to modify
 %
 % repeating arguments:
-%     varargin    list of 'Name', 'Value' pairs, used as name-value arguments to set axis properties
-%                 (NOTE: name='value' syntax is not supported)
+%     varargin    all extra arguments are passed to set() (NOTE: name='value' syntax is not supported for varargin)
 %                 to leave a property unchanged, specify 'Name',missing
 %
 % name-value arguments:
