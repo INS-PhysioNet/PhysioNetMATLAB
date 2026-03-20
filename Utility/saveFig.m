@@ -43,6 +43,7 @@ for fmat = format'
   if fmat == "svg"
     % remove white background from figure and axes
     set(findall(fig,'type','axes'),'Color','none')
+    set(findall(fig,'type','polaraxes'),'Color','none')
     fig.Color = 'none';
   end
 
@@ -51,6 +52,7 @@ for fmat = format'
   if fmat == "svg"
     % restore white backgrounds
     set(findall(fig,'type','axes'),'Color','white')
+    set(findall(fig,'type','polaraxes'),'Color','white')
     fig.Color = 'white';
   end
 
