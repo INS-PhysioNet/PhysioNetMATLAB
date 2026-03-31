@@ -50,22 +50,30 @@ else
   end
 end
 
-% make figure of correct size
-orig_units = get(0,'Units');
-set(0,'Units','centimeters')
-screen_size = get(0,'Screensize');
-set(0,'Units',orig_units)
-pos = screen_size;
-pos([false,false,~isnan(opt.size)]) = opt.size(~isnan(opt.size)) * (1 + 1.5 * (opt.format=="poster")); % increase size of 2.5x in 'poster' mode
-% center figure
-for i = 1 : 2
-  pos(i) = max(pos(i), pos(i)+(screen_size(i+2)-pos(i+2))/2);
+% compute size
+has_size = ~all(isnan(opt.size));
+if has_size
+  orig_units = get(0,'Units');
+  set(0,'Units','centimeters')
+  screen_size = get(0,'Screensize');
+  set(0,'Units',orig_units)
+  pos = screen_size;
+  pos([false,false,~isnan(opt.size)]) = opt.size(~isnan(opt.size)) * (1 + 1.5 * (opt.format=="poster")); % increase size of 2.5x in 'poster' mode
+  % center figure
+  for i = 1 : 2
+    pos(i) = max(pos(i), pos(i)+(screen_size(i+2)-pos(i+2))/2);
+  end
 end
 
-if opt.show
-  fig = figure('Name',name,'NumberTitle','off','Units','centimeters','Position',pos,'DefaultLineLinewidth',1.3);
-else
-  fig = figure('Name',name,'NumberTitle','off','Units','centimeters','Position',pos,'DefaultLineLinewidth',1.3,'Visible','off');
+switch 10*has_size + opt.show % use binary-like code to decide
+  case 0
+    fig = figure('Name',name,'NumberTitle','off','Units','centimeters','DefaultLineLinewidth',1.3,'Visible','off');
+  case 1
+    fig = figure('Name',name,'NumberTitle','off','Units','centimeters','DefaultLineLinewidth',1.3);
+  case 10
+    fig = figure('Name',name,'NumberTitle','off','Units','centimeters','Position',pos,'DefaultLineLinewidth',1.3,'Visible','off');
+  case 11
+    fig = figure('Name',name,'NumberTitle','off','Units','centimeters','Position',pos,'DefaultLineLinewidth',1.3);
 end
 
 t = []; % empty tiledlayout handle, to keep track of whether a suptitle is needed
