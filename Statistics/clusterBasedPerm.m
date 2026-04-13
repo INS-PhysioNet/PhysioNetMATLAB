@@ -1,4 +1,4 @@
-function stats = clusterbased_perm(data1, data2, varargin)
+function stats = clusterBasedPerm(data1, data2, varargin)
 %
 % Performs a cluster-based permutation test to compare two groups of data
 % (eg, peth wake vs peth sleep), accounting for temporal correlation.
