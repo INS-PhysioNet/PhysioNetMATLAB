@@ -39,21 +39,21 @@ end
 
 % save in all formats
 for fmat = format'
-
   if fmat == "svg"
     % remove white background from figure and axes
     set(findall(fig,'type','axes'),'Color','none')
     set(findall(fig,'type','polaraxes'),'Color','none')
     fig.Color = 'none';
-  end
-
-  exportgraphics(fig,file_name+"."+fmat,'Resolution',opt.res,'BackgroundColor','none');
-
-  if fmat == "svg"
+    % export
+    exportgraphics(fig,file_name+"."+fmat,'Resolution',opt.res,'BackgroundColor','none','ContentType','vector');
     % restore white backgrounds
     set(findall(fig,'type','axes'),'Color','white')
     set(findall(fig,'type','polaraxes'),'Color','white')
     fig.Color = 'white';
+
+  else
+    exportgraphics(fig,file_name+"."+fmat,'Resolution',opt.res,'BackgroundColor','none');
+
   end
 
 end
