@@ -1,19 +1,25 @@
 function pvals = MCpValue(x,p,alternative)
-% MCpValue Gget corresponding percentiles (in [0,1]) of values p in data x
+% MCpValue Get corresponding percentiles (in [0,1]) of values p in data x
 %
 % arguments:
-%     x              char, path to text file, where each line contains the path to a session's xml file and optional arguments and comments (see usage)
-%     p              observed values
-%     alternative    string = 'two-sided', can also be "greater" or "less", test direction, either:
+%     x              (n,m), surrogate data, n: n. surrogate replicates, m: n. independent data sets
+%     p              (l,m), observed values, l: n. values to test, m: same as above
+%     alternative    string = 'two-sided', test direction, either:
 %                      - 'two-sided':  two tailed test
 %                      - 'greater':    test the null hypothesis that observed values are smaller than surrogate
 %                      - 'less':       test the null hypothesis that observed values are greater than surrogate
-
-% alternative "greater": high p-value if x bigger than p -> H0: x is bigger than p
+%
+% output:
+%     pvals          (l,m), p-values associated to each element of p
+%
+% notes:
+%     1. the function is vectorized as if results were computed separately per each element of 'p'
+%     2. elements in the same column of 'p' are separately tested against the same column of 'x'
+%     3. alternative 'greater' gives high p-values if 'x' is bigger than 'p' -> H0: x is bigger than p
 
 arguments
-  x (:,:) % n_observation, n_data_sets
-  p (:,:) % n_values, n_data_sets
+  x (:,:)
+  p (:,:)
   alternative (1,1) string {mustBeMember(alternative,["two-sided","greater","less"])} = "two-sided"
 end
 
