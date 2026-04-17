@@ -106,4 +106,4 @@ for i = 1 : numel(sessions)
   opt.verbose && fprintf(1,'\n');
 end
 
-opt.verbose && fprintf(1,'Batch completed with %d errors\n',errors);
+opt.verbose && fprintf(1,"Batch completed with "+string(sum(errors))+" errors, "+string(datetime));
