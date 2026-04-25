@@ -110,8 +110,14 @@ if nargout > 1
       upper_fence = q3 + 1.5 * iqr_val;
 
       % whiskers: most extreme data within fences
-      varargout{2}.lw(i,j) = min(x(x >= lower_fence));
-      varargout{2}.uw(i,j) = max(x(x <= upper_fence));
+      lw = min(x(x >= lower_fence));
+      if ~isempty(lw)
+        varargout{2}.lw(i,j) = lw;
+      end
+      uw = max(x(x <= upper_fence));
+      if ~isempty(uw)
+        varargout{2}.uw(i,j) = uw;
+      end
       varargout{2}.q1(i,j) = q1;
       varargout{2}.q2(i,j) = q2;
       varargout{2}.q3(i,j) = q3;
