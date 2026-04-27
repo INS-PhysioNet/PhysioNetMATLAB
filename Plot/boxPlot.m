@@ -72,11 +72,11 @@ end
 if ~isempty(opt.label)
   if n_groups == 1 && numel(opt.label) == n_colors
     % special case: one x tick for every color
-    xticks(arrayfun(@(x) x.XData(1), b))
+    xticks(opt.ax,arrayfun(@(x) x.XData(1), b))
   else
-    xticks(unique(b(1).XData))
+    xticks(opt.ax,unique(b(1).XData))
   end
-  xticklabels(opt.label)
+  xticklabels(opt.ax,opt.label)
 end
 if ~isempty(opt.color)
   for i = 1 : numel(b)
