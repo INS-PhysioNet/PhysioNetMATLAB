@@ -1,9 +1,9 @@
 function varargout = boxPlot(data,group,opt)
-% plotDistr Plot boxplot of data
+% boxPlot Plot boxplot of data
 %
 %  arguments
-%     data       (n,c), columns define different data vectors, plotted as boxplots of different colors
-%     group      (n,1), second grouping variable, defines multiple sets of boxplot, each centered on a value of 'group'
+%     data       (n,c), columns define a first grouping variable, each columns yields a boxplot of different color
+%     group      (n,1) = [], second grouping variable, defines multiple sets of boxplot, each centered on a value of 'group'
 %
 % name-value arguments
 %     reverse    logical = false, reverse roles of columns in 'data' and 'group': the former defines boxplot sets, the latter colors
@@ -14,13 +14,13 @@ function varargout = boxPlot(data,group,opt)
 %
 % output
 %     b          (1,c) BoxChart
-%     infp       struct, having fields:
+%     info       struct, having fields:
 %     - lw, q1, q2, q3, uw    (n_groups,n_colors) double, lower whisker, quantiles and upper whisker values, respectively, per boxplot
 %     - ol                    {n_groups,n_colors} cell of logical, mask identifying outliers per boxplot (NaNs are flagged as false)
 
 arguments
   data (:,:) {mustBeNumeric}
-  group (:,1) = ones(size(data,1),1)
+  group (:,1) = []
   opt.reverse (1,1) {mustBeLogical} = false
   opt.legend (:,1) string = string.empty
   opt.label (:,1) string = string.empty
@@ -28,6 +28,9 @@ arguments
   opt.ax (1,1) matlab.graphics.axis.Axes = gca
 end
 
+if isempty(group)
+  group = ones(size(data,1),1);
+end
 if numel(group) ~= size(data,1)
   error('boxPlot:groupSize',"'group' must have one element for every row of 'data'")
 end
@@ -89,7 +92,9 @@ if ~isempty(opt.legend)
   end
 end
 
-varargout{1} = b;
+if nargout > 0
+  varargout{1} = b;
+end
 
 if nargout > 1
   unique_groups = unique(group).';
