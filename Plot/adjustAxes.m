@@ -1,5 +1,5 @@
 function adjustAxes(axes,varargin,opt)
-% adjustAxes Adjust axes properties using default values
+% adjustAxes Adjust axes properties for publication-grade figures
 %
 % arguments:
 %     axes        axes to modify
@@ -11,15 +11,10 @@ function adjustAxes(axes,varargin,opt)
 % name-value arguments:
 %     format      string, either 'paper' (default) or 'poster', controls font sizes and lines' width
 
-% Copyright (C) 2025 by Pietro Bozzo
-%
-% This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License
-% as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
-
-% NOTE see AdjustAxes for interesting feature on passing fig AS ARG AND SETTING XLim
+% NOTE for future development, see AdjustAxes from FMAT for interesting feature on passing fig as arg and setting XLim
 
 arguments
-  axes
+  axes matlab.graphics.axis.Axes
 end
 arguments (Repeating)
   varargin
