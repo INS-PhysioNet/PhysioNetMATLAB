@@ -1,5 +1,21 @@
 function [p,h] = maxStatisticTest(data,surrogate,statistic,opt)
-% maxStatisticTest Conduct a max statistic test over time
+% maxStatisticTest Conduct a max statistic test to find time points where a statistic of observed data is not explained by surrogate data
+% All repeated experiments are assumed to share the same time reference
+%
+%  arguments
+%     data          (r,t), columns are replicates for an experiment, rows are time points
+%     surrogate     (r,t,s), EXPLAIN
+%     statistic     EXPLAIN
+%
+% name-value arguments
+%     alpha         double = 0.05, accepted false-discovery rate
+%     alternative   string = 'two-sided', test direction, either:
+%                     - 'two-sided':  two tailed test
+%                     - 'greater':    test the null hypothesis that observed values are smaller than surrogate
+%                     - 'less':       test the null hypothesis that observed values are greater than surrogate
+%
+% output
+%     
 
 % alternative "greater": high p-value if surrogate stat is bigger than real -> H0: surrogate statistic is bigger than real, so take max for every surr
 
